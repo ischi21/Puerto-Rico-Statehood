@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset=""utf-8 />
+	<title>Votemos Boricua</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+	 <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=info" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: "whitesmoke";
+			font-family: "Mulish", sans-serif;
+			color: #3d3d3d;
+		}
+
+		h1 {
+			position: absolute;
+			margin-top: 0;
+			top: 10px;
+			left: 45px;
+			font-size: 2.6em;
+			font-family: Zen Tokyo Zoo;
+            
+			letter-spacing: .09em;
+			padding: 10px 15px;
+			background: transparent;
+			border: 3px white;
+			border-radius: 10px;
+			z-index: 800;
+		}
+
+		h2 {
+			font-family: "Mulish";
+			letter-spacing: .04em;
+            color:rgb(197, 27, 125)
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		section {
+			position: absolute; /* Use absolute positioning */
+			bottom: 20px; /* Position it 20px from the bottom of the screen */
+			left: 50%; /* Move the section to the center horizontally */
+			transform: translateX(-50%); /* Adjust for the section's width to center it */
+			width: 1200px; /* Set the width */
+            height: 150px; /* Set the height */
+			margin: 0 auto; /* Remove unnecessary margin */
+			padding: 5px 15px; /* Reduce top padding */
+			background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+			color: white; /* Text color */
+			border: 3px solid white; /* Add a border */
+			border-radius: 10px; /* Round the corners */
+			z-index: 800; /* Ensure it appears above other elements */
+			font-family: 'Mulish', sans-serif; /* Font styling */
+			font-size: 18px; /* Font size */
+            text-align: center;
+		}
+
+		section h2 {
+			margin-top: 0; /* Remove top margin */
+			margin-bottom: 10px; /* Adjust spacing below the header */
+		}
+
+		p {
+			font-size: .9em;
+			line-height: 1.5em;
+            
+		}
+
+		a {
+			color: #005daa;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		.legend {
+    line-height: 0px;
+    font-size: 16px;
+    width: 140px;
+    color:rgb(197, 27, 125);
+    padding: 6px 8px;
+    background: white;
+    background: rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    border: 1px solid white; /* Add a border */
+}
+
+.legend i {
+    width: 20px;
+    font: "Mulish";
+    height: 20px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.9;
+    color:rgb(197, 27, 125);
+    
+}
+
+.legend img {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    float: left;
+}
+
+.legend p {
+    font-size: 14px;
+    font: 14px/16px "Mulish";
+    line-height: 20px;
+    margin: 0;
+    color: white;
+    
+    
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px "Mulish";
+    color:rgb(247, 247, 247);
+    background: white;
+    background: rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    border: 1px solid white; /* Add a border */
+}
+
+.info h4 {
+    margin: 0 0 5px;
+    color:rgb(197, 27, 125);
+    font: bold 16px/20px "Mulish";
+}
+
+    #title span:nth-child(odd) {
+        color: white
+    }
+
+    #title span:nth-child(even) {
+        color: rgb(197, 27, 125);
+    }
+
+   
+
+    .custom-popup .leaflet-popup-content-wrapper {
+        background-color: rgba(0, 0, 0, 0.8); /* Set the background color */
+        border: 1px solid rgb(300, 300, 300); /* Add a border */
+        border-radius: 8px; /* Round the corners */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Add a shadow */
+        padding: 5px; /* Add padding */
+    }
+
+    .custom-popup .leaflet-popup-content {
+        font-family: 'Mulish', sans-serif; /* Set the font */
+        font-size: 14px; /* Adjust the font size */
+        color: rgb(300, 300, 300); /* Set the text color */
+        line-height: 1.5; /* Adjust line height */
+    }
+
+    .custom-popup .leaflet-popup-tip {
+        background: rgb(300, 300, 300, 0); /* Match the tip color with the border */
+    }
+
+    .custom-popup .leaflet-popup .leaflet-popup-tip {
+        background: white; /* Match the popup background */
+    }
+
+    .marker-icon {
+        font-size: 50px; /* Adjust the size */
+        color: white;
+    }
+
+    .leaflet-tooltip {
+        background-color: rgba(0, 0, 0, 0.8); /* Change background color */
+        color: white; /* Change text color */
+        font-family: 'Mulish', sans-serif; /* Change font */
+        font-size: 14px; /* Adjust font size */
+        padding: 5px 10px; /* Add padding */
+        border-radius: 5px; /* Round the corners */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Add a shadow */
+    }
+
+    .leaflet-tooltip.leaflet-tooltip-top::before {
+        border-top-color: rgba(0, 0, 0, 0.8); /* Match tooltip arrow color with background */
+    }
+	</style>
+	    <script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>
+		
+</head>
+
+<body>
+
+	<h1 id="title">
+		<span>VOTEMOS</span><span>BORICUA</span>
+	</h1>
+
+	<div id='map'></div>
+
+	<section>
+		<h2>How Puerto Rico voted for statehood in 2020</h2>
+
+		<p>On November 3rd of 2020, Puerto Rico held their general election that included a state referendum. It asked citizens a yes or no question as to whether the island should become the next state. The total vote was pro-statehood, with 52.34% in favor and 47.66% opposing.</p>
+        <p> Green tones represent more Yes votes while pink tones represent more No votes. Click the star icons to view issues on the island that affected the voting results. </p>
+        
+
+	</section>
+
+
+	<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+	<script>
+
+		var options = {
+			center: [18.170762, -66.418773],
+			zoom: 9
+		}
+		var map = L.map('map', options);
+
+		var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>, <a href="https://docs.google.com/document/d/1w457am_Svj6vyiCnWMegzkFYf-_f91Fx2BUlB0rwV_8/edit?usp=sharing">Sources</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+		}).addTo(map);
+
+		// 3. Add Airbnb GeoJSON Data
+// Null variable that will hold Airbnb data
+var PRPoints = null;
+// add several extra spaces here.
+// 4. build up a set of colors from colorbrewer's dark2 category
+var colors = chroma.scale('Dark2').mode('lch').colors(3);
+
+// 5. dynamically append style classes to this page. The style classes will be used to shade the markers.
+// We can use a for loop to do this.
+for (i = 0; i < 3; i++) {
+    $('head').append($("<style> .marker-color-" + (i + 1).toString() + " { color: " + colors[i] + "; font-size: 15px; text-shadow: 0 0 3px #ffffff;} </style>"));
+}
+
+
+
+//steps 4, 5, etc. will be inserted in this line location.
+
+// Get GeoJSON and put it on the map when it loads
+// Make sure you have the correct directory path below
+// You can see we're also adding attribution information for our data sources
+// We will also add lines of code around this airbnb_listings object as we adjust the style of the symbols
+//Make sure and change your authorname in the attribute information
+PRPoints = L.geoJson.ajax("data/PRPoints.geojson",{
+	pointToLayer: function (feature, latlng) {
+        // Create a custom icon for the marker
+        var icon = L.divIcon({
+            className: 'marker-color-' + feature.properties.color,
+            html: '<i class="fa-solid fa-star" style="color:#FFC900; font-size: 15px; text-shadow: 0 0 1px black, 0 0 3px black;"></i>', // Add text-shadow for outline
+            iconSize: [40, 40],
+            iconAnchor: [10, 10], // Center the icon
+        });
+        return L.marker(latlng, {icon: icon});
+    },
+    onEachFeature: function(feature, layer) {
+        // Log the feature properties to the console for debugging
+        console.log(feature.properties);
+
+        // Bind a popup to the layer to display the "info" section on click
+        layer.bindPopup(
+            `<strong>Name:</strong> ${feature.properties['name']}<br>
+             <strong>Info:</strong> ${feature.properties['info'] || 'No additional info available.'}`,
+            { className: 'custom-popup' } // Apply custom popup style
+        );
+
+        // Optionally, bind a tooltip for hover behavior
+        layer.bindTooltip(feature.properties['name']);
+    },
+    attribution: 'NC Department of Agriculture and Consumer Services, North Carolina Forest Service, NOAA | CartoDB.Positron; CartoDB | Map Author: Bella Schiavone'
+});
+PRPoints.addTo(map);
+
+//Choropleth Layer
+
+
+// 6. Set function for color ramp
+colors = chroma.scale('PiYG').colors(9); // Diverging color scale with 9 colors
+
+// Update the setColor function for 9 classes
+function setColor(Margin) {
+    var id = 0;
+    if (Margin > 15) { id = 8; } // 15+
+    else if (Margin >= 10 && Margin <= 14) { id = 7; } // 10-14
+    else if (Margin >= 5 && Margin <= 9) { id = 6; } // 5-9
+    else if (Margin >= 1 && Margin <= 4) { id = 5; } // 1-4
+    else if (Margin === 0) { id = 4; } // 0
+    else if (Margin >= -4 && Margin <= -1) { id = 3; } // -1 to -4
+    else if (Margin >= -9 && Margin <= -5) { id = 2; } // -5 to -9
+    else if (Margin >= -14 && Margin <= -10) { id = 1; } // -10 to -14
+    else { id = 0; } // -15+
+    return colors[id];
+}
+
+// 7. Set style function that sets fill color property equal to total Airbnbs
+function style(feature) {
+    return {
+        fillColor: setColor(feature.properties.Margin),
+        fillOpacity: 0.8,
+        weight: .8,
+        opacity: 1,
+        color: 'white',
+        dashArray: '0'
+    };
+}
+// 8. Add county polygons
+var countiesLayer = L.geoJson.ajax("data/PRChoro.geojson", {
+    style: style,
+    onEachFeature: function (feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight
+        });
+    }
+}).addTo(map);
+
+// Define the highlightFeature function
+function highlightFeature(e) {
+    var layer = e.target;
+
+    console.log("Highlighting feature:", layer.feature.properties); // Debugging
+
+    layer.setStyle({
+        weight: 3,
+        color: 'white',
+        fillOpacity: 0.8
+    });
+
+    layer.bringToFront();
+    info.update(layer.feature.properties); // Pass properties to info.update
+}
+
+// Define the resetHighlight function
+function resetHighlight(e) {
+    countiesLayer.resetStyle(e.target);
+    info.update(); // Clear the info control
+}
+
+// 9. Create Leaflet Control Object for Legend
+var legend = L.control({position: 'topright'});
+
+// 10. Function that runs when legend is added to map
+legend.onAdd = function () {
+    // Create Div Element and Populate it with HTML
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML += '<h4 style="font-family: Mulish; font-size: 16px; font-weight: bold;">Voting Results</h4>';
+    div.innerHTML += '<i style="background: ' + colors[8] + '; opacity: 1"></i><p>15+</p>';
+    div.innerHTML += '<i style="background: ' + colors[7] + '; opacity: 1"></i><p>10-14</p>';
+    div.innerHTML += '<i style="background: ' + colors[6] + '; opacity: 1"></i><p>5-9</p>';
+    div.innerHTML += '<i style="background: ' + colors[5] + '; opacity: 1"></i><p>1-4</p>';
+    div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 1"></i><p>0</p>';
+    div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 1"></i><p>-1 to -4</p>';
+    div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 1"></i><p>-5 to -9</p>';
+    div.innerHTML += '<i style="background: ' + colors[1] + '; opacity: 1"></i><p>-10 to -14</p>';
+    div.innerHTML += '<i style="background: ' + colors[0] + '; opacity: 1"></i><p>-15+</p>';
+    return div;
+};
+
+// 11. Add a legend to map
+legend.addTo(map);
+
+// Initialize the info control
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // Create a div with a class "info"
+    this.update(); // Initialize the content
+    return this._div;
+};
+
+// Define the update function for the info control
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Voting Percentages</h4>' + 
+        (props
+            ? '<b>Municipality:</b> ' + (props.NAME || 'N/A') + '<br />' + // Display the name
+              '<b>YES Votes:</b> ' + (props.YES || 'N/A') + '<br />' +
+              '<b>NO Votes:</b> ' + (props.NO || 'N/A') + '<br />'
+            : 'Hover over a municipality');
+};
+
+// Add the info control to the map
+info.addTo(map);
+
+
+
+
+
+
+	</script>
+
+</body>
+
+</html>
